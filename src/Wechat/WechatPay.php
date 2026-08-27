@@ -280,7 +280,7 @@ class WechatPay extends WechatBase
         ksort($args);
         $string = '';
         foreach ($args as $i => $arg) {
-            if ($args === null || $arg === '') {
+            if ($arg === null || $arg === '') {
                 continue;
             } else {
                 $string .= ($i . '=' . $arg . '&');

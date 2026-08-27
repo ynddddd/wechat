@@ -60,7 +60,9 @@ class Wechat extends WechatBase
     private function setCacheComponent()
     {
         if (!$this->cache) {
-            $this->cacheObject = new FilesystemCache(dirname(dirname(__DIR__)) . '/runtime/cache');
+            $dir = dirname(dirname(__DIR__)) . '/runtime/cache';
+            $this->cacheObject = new FilesystemCache($dir);
+            @chmod($dir, 0777);
         }
         $target = !empty($this->cache['target']) ? $this->cache['target'] : static::CACHE_TARGET_FILE;
         switch ($target) {
@@ -68,6 +70,7 @@ class Wechat extends WechatBase
                 $dir = !empty($this->cache['dir']) ?
                     $this->cache['dir'] : (dirname(dirname(__DIR__)) . '/runtime/cache');
                 $this->cacheObject = new FilesystemCache($dir);
+                @chmod($dir, 0777);
                 break;
             case static::CACHE_TARGET_REDIS:
                 $host = !empty($this->cache['host']) ? $this->cache['host'] : '127.0.0.1';
@@ -200,6 +203,16 @@ class Wechat extends WechatBase
         $aesCipher = base64_decode($encryptedData);
         $result = openssl_decrypt($aesCipher, "AES-128-CBC", $aesKey, 1, $aesIV);
         $dataObj = json_decode($result, true);
+        if (!$dataObj) {
+            return [
+                'openId' => $sessionData['openid'],
+                'nickName' => null,
+                'avatarUrl' => null,
+                'unionId'=> isset($sessionData['unionid']) ? $sessionData['unionid'] : '',
+            ];
+        }
+        $dataObj['openId'] = $sessionData['openid'];
+        $dataObj['unionId'] = isset($sessionData['unionid']) ? $sessionData['unionid'] : '';
         return $dataObj;
     }
 }
