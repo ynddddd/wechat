@@ -1,0 +1,24 @@
+{
+  "name": "ynddddd/wechat",
+  "description": "PHP Wechat SDK",
+  "keywords": [
+    "Wechat"
+  ],
+  "type": "library",
+  "license": "Apache-2.0",
+  "require": {
+    "doctrine/cache": "~1.3,<1.7",
+    "guzzlehttp/guzzle": "~6.0"
+  },
+  "authors": [
+    {
+      "name": "ynddddd",
+      "email": "huxu1120@qq.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "ynddddd\\Wechat\\": "src/Wechat"
+    }
+  }
+}
